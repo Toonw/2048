@@ -142,9 +142,8 @@ def transpose( matrix ):
     :return: the transpose of matrix
     :rtype: list[list[int | None]]
     """
-
+    matrix = [list(x) for x in zip(*matrix)]
     return matrix # complete me
-
 
 def mirror( matrix ):
     """
