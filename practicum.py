@@ -90,25 +90,14 @@ def mirror(matrix):
 def has_empty_slot(matrix):
     """
     Checks for empty slots (`None`) elements in the matrix.
-
-    Examples:
-        >>> has_empty_slot( [ [ 1 ] ] )
-        False
-        >>> has_empty_slot( [ [ None ] ] )
-        True
-        >>> has_empty_slot( [ [ 2, 2 ], [ 4, 4 ] ] )
-        False
-        >>> has_empty_slot( [ [ 2, None ], [ 4, 4 ] ] )
-        True
-        >>> has_empty_slot( [ [ 2, None ], [ 4, None ] ] )
-        True
-
-    :param matrix: matrix to check
-    :rtype matrix: list[ list[ int | None ] ]
-    :return: whether there is an empty slot
-    :rtype boolean
     """
-    return True  # Complete me
+
+    for i in range(len(matrix)):
+        for j in range(len(matrix)):
+            if matrix[i][j] is None:
+                return True
+
+    return False  # Complete me
 
 
 def has_matches(matrix):
