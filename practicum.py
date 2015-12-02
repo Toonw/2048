@@ -85,22 +85,21 @@ def match(row):
     :return: tuple with matched row and score
     :rtype: ( list[ int | None ], int )
     """
-    matchedRow = list(row)
     score = 0
-    for i in range(len(matchedRow)-1):
-        if matchedRow[i] is not None:
-            if matchedRow[i] == matchedRow[i+1]:    #next to each other. ex: [2, 2, None]
-                matchedRow[i] = matchedRow[i]*2
-                matchedRow[i+1] = None
-                score += matchedRow[i]
-            elif matchedRow[i+1] is None:           #not next to each other. ex: [2, None, 2]
-                for e in range(i+2, len(matchedRow)):
-                    if (matchedRow[e] is not None) & (matchedRow[e] == matchedRow[i]):
-                        matchedRow[i] = matchedRow[i]*2
-                        matchedRow[e] = None
-                        score += matchedRow[i]
+    for i in range(len(row)-1):
+        if row[i] is not None:
+            if row[i] == row[i+1]:    #next to each other. ex: [2, 2, None]
+                row[i] = row[i]*2
+                row[i+1] = None
+                score += row[i]
+            elif row[i+1] is None:           #not next to each other. ex: [2, None, 2]
+                for e in range(i+2, len(row)):
+                    if (row[e] is not None) & (row[e] == row[i]):
+                        row[i] = row[i]*2
+                        row[e] = None
+                        score += row[i]
 
-    return (matchedRow, score) # Complete me
+    return (row, score) # Complete me
 
 def reduce(row):
     """
@@ -122,15 +121,14 @@ def reduce(row):
     :param row: the row to remove empty spaces from
     :return: row with all not None elements in the front
     """
-    reducedRow = list(row)
-    for i in range(len(reducedRow)):
-        if (reducedRow[i] is not None):
-            if i > 0:
-                reducedRow[i-1] = reducedRow[i]
-                reducedRow[i] = None
 
-    return reducedRow # Complete me
-
+    for e in range(len(row)):
+        for i in range(len(row)):
+            if (row[i] is not None):
+                if (i > 0) & (row[i-1] is None):
+                    row[i-1] = row[i]
+                    row[i] = None
+    return row # Complete me
 
 def transpose( matrix ):
     """
@@ -144,6 +142,7 @@ def transpose( matrix ):
     :return: the transpose of matrix
     :rtype: list[list[int | None]]
     """
+
     return matrix # complete me
 
 
