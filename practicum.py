@@ -103,38 +103,31 @@ def has_empty_slot(matrix):
 def has_matches(matrix):
     """
     Checks if there are potential matches in the matrix.
-
-    There is a potential match in the matrix if in any of the rows
-    or columns contain two identical elements next to each other or
-    only separated by `None`'s.
-
-    Examples:
-        >>> has_matches( [ [ 2, None ], [ None, 2 ] ] )
-        False
-        >>> has_matches( [ [ 2, 2 ], [ None, None ] ] )
-        True
-        >>> has_matches( [ [ 2, None ], [ 2, None ] ] )
-        True
-        >>> has_matches( [ [ 2, 4 ], [ 4, 2 ] ] )
-        False
-        >>> has_matches( [ [ 2, None, 2 ], [ None, None, None ], [ None, None, None ] ] )
-        True
-        >>> has_matches( [ [ 2, 4, 2 ], [ None, None, None ], [ None, None, None ] ] )
-        False
-        >>> has_matches( [ [ 2, None, None ], [ None, None, None ], [ 2, None, None ] ] )
-        True
-        >>> has_matches( [ [ None, None, 2 ], [ None, None, 2 ], [ None, None, None ] ] )
-        True
-        >>> has_matches( [ [ 2, None, None ], [ None, None, None ], [ None, None, 2 ] ] )
-        False
-        >>> has_matches( [ [ 2, None, None ], [ None, 2, None ], [ None, None, 2 ] ] )
-        False
-
-    :param matrix: matrix to check for matches
-    :rtype matrix: list[ list[ int | None ] ]
-    :return: whether there are any matches
-    :rtype: boolean
     """
+    for i in range(len(matrix)):
+        for j in range(len(matrix)):
+            if matrix[i][j] is not None:
+                try:
+                    if (matrix[i][j] == matrix[i+1][j]) or (matrix[i][j] == matrix[i][j+1]):
+                        return True
+                except IndexError:
+                    break
+                try:
+                    if matrix[i+1][j] is None:
+                        for e in range(i+1, len(matrix)):
+                            if matrix[e][j] is not None:
+                                if matrix[e][j] == matrix[i][j]:
+                                    return True
+                except IndexError:
+                    break
+                try:
+                    if matrix[i][j+1] is None:
+                        for e in range(i+1, len(matrix)):
+                            if matrix[i][e] is not None:
+                                if matrix[i][e] == matrix[i][j]:
+                                    return True
+                except IndexError:
+                    break
     return False  # Complete me
 
 
