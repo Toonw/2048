@@ -10,6 +10,8 @@
 # This imports our GUI code and allows you to play the game based on the
 # functions you define in this file.
 import game
+from random import randint
+import math
 
 
 def initialize( dimension = 4, nb_of_pieces = 2, difficulty = 2 ):
@@ -30,7 +32,17 @@ def initialize( dimension = 4, nb_of_pieces = 2, difficulty = 2 ):
     :rtype list[ list[ int | None ] ]
     """
 
-    return "Complete me"
+    board = [[None for i in range(dimension)] for j in range(dimension)]
+    pieces = 0
+    while (pieces < nb_of_pieces):
+        i = randint(0,3)
+        j = randint(0,3)
+        if (board[i][j] == None) & (pieces < nb_of_pieces):
+            board[i][j] = math.pow(2 , randint(1, difficulty))
+            pieces += 1
+
+    return board
+
 
 
 def match(row):
