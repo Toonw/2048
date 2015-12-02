@@ -43,8 +43,6 @@ def initialize( dimension = 4, nb_of_pieces = 2, difficulty = 2 ):
 
     return board
 
-
-
 def match(row):
     """
     Matches all identical elements in the row.
@@ -104,7 +102,6 @@ def match(row):
 
     return (matchedRow, score) # Complete me
 
-
 def reduce(row):
     """
     Removes the empty spaces in a row.
@@ -125,7 +122,14 @@ def reduce(row):
     :param row: the row to remove empty spaces from
     :return: row with all not None elements in the front
     """
-    return row # Complete me
+    reducedRow = list(row)
+    for i in range(len(reducedRow)):
+        if (reducedRow[i] is not None):
+            if i > 0:
+                reducedRow[i-1] = reducedRow[i]
+                reducedRow[i] = None
+
+    return reducedRow # Complete me
 
 
 def transpose( matrix ):
