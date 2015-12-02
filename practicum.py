@@ -22,8 +22,8 @@ def initialize(dimension=4, nb_of_pieces=2, difficulty=2):
     board = [[None for i in range(dimension)] for j in range(dimension)]
     piecesOnBoard = 0
     while piecesOnBoard < nb_of_pieces:
-        i = randint(0, 3)
-        j = randint(0, 3)
+        i = randint(0, dimension-1)
+        j = randint(0, dimension-1)
         if (board[i][j] is None) & (piecesOnBoard < nb_of_pieces):
             board[i][j] = math.pow(2, randint(1, difficulty))
             piecesOnBoard += 1
@@ -133,46 +133,17 @@ def has_matches(matrix):
 
 def insert_new(matrix, number, difficulty=2):
     """
-    Inserts `number` new elements in the matrix.  The maximum log2 of the newly
-    introduced elements should be difficulty.
-
-    This method should introduce new elements in the matrix.  The number of
-    elements to introduce is given by `number`.  The location of the new elements
-    should be chosen at random.
-
-    To make the game more difficult, the elements introduced could also be greater
-    than 2.  This is achieved through the `difficulty` argument.  Given a `difficulty` of
-    `n`, this function should only introduce elements smaller or equal to math.pow( 2, n ).
-    The power of 2 for the new elements can be chosen randomly from the range 1 to n,
-    including both 1 and n.
-
-    If `number` is greater than the number of empty slots in the board.  The function
-    should simply fill the board, not overriding any of the existing elements.
-
-    Examples:
-        >>> insert_new( [ [ 8, 8 ], [ 8, 8 ] ], 1, 1 )
-        [ [ 8, 8 ], [ 8, 8 ] ]
-        >>> insert_new( [ [ 8, 8 ], [ 8, None ] ], 1, 1 )
-        [ [ 8, 8 ], [ 8, 2 ] ]
-        >>> insert_new( [ [ None, None ], [ None, None ] ], 4, 3 )
-        [ [ 2, 4 ], [ 2, 8 ] ]
-        >>> insert_new( [ [ None, None ], [ None, None ] ], 2, 2 )
-        [ [ 2, None ], [ 4, None ] ]
-        >>> insert_new( [ [ None, None ], [ None, None ] ], 2, 1 )
-        [ [ None, 2 ], [ None, None ] ]
-
-    :param matrix: matrix to insert new elements into
-    :type matrix: list[ list[ int | None ] ]
-
-    :param number: number of elements to introduce
-    :type number: int
-
-    :param difficulty: maximum log2 of the new elements
-    :type difficulty: int
-
-    :return: matrix with new elements
-    :rtype: list[list[int | None]]
+    Inserts `number` new elements in the matrix.
     """
+    counter = 0
+    while counter != number:
+        if has_empty_slot(matrix):
+            i = randint(0, len(matrix)-1)
+            j = randint(0, len(matrix)-1)
+            if matrix[i][j] is None:
+                matrix[i][j] = math.pow(2, randint(1, difficulty))
+                counter += 1
+
     return matrix  # Complete me
 
 
