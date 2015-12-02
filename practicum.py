@@ -150,15 +150,12 @@ def insert_new(matrix, number, difficulty=2):
 def should_continue(matrix):
     """
     Calculates whether the game should continue
-
-    The game should continue as long as there are empty slots
-    in the game or there are matches possible.
-
-    :param matrix: current board state
-    :return: whether there are empty slots or matches left in the board
     """
-    return True  # Complete me
-
+    if has_matches(matrix) | has_empty_slot(matrix):
+        return True
+    else:
+        return False
+ 
 
 def handle_key_press(board, score, direction):
     """
