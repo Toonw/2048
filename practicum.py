@@ -33,13 +33,13 @@ def initialize( dimension = 4, nb_of_pieces = 2, difficulty = 2 ):
     """
 
     board = [[None for i in range(dimension)] for j in range(dimension)]
-    pieces = 0
-    while (pieces < nb_of_pieces):
+    piecesOnBoard = 0
+    while (piecesOnBoard < nb_of_pieces):
         i = randint(0,3)
         j = randint(0,3)
-        if (board[i][j] == None) & (pieces < nb_of_pieces):
+        if (board[i][j] is None) & (piecesOnBoard < nb_of_pieces):
             board[i][j] = math.pow(2 , randint(1, difficulty))
-            pieces += 1
+            piecesOnBoard += 1
 
     return board
 
@@ -87,7 +87,22 @@ def match(row):
     :return: tuple with matched row and score
     :rtype: ( list[ int | None ], int )
     """
-    return ( row, 0 ) # Complete me
+    matchedRow = list(row)
+    score = 0
+    for i in range(len(matchedRow)-1):
+        if matchedRow[i] is not None:
+            if matchedRow[i] == matchedRow[i+1]:    #next to each other. ex: [2, 2, None]
+                matchedRow[i] = matchedRow[i]*2
+                matchedRow[i+1] = None
+                score += matchedRow[i]
+            elif matchedRow[i+1] is None:           #not next to each other. ex: [2, None, 2]
+                for e in range(i+2, len(matchedRow)):
+                    if (matchedRow[e] is not None) & (matchedRow[e] == matchedRow[i]):
+                        matchedRow[i] = matchedRow[i]*2
+                        matchedRow[e] = None
+                        score += matchedRow[i]
+
+    return (matchedRow, score) # Complete me
 
 
 def reduce(row):
