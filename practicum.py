@@ -14,155 +14,80 @@ from random import randint
 import math
 
 
-def initialize( dimension = 4, nb_of_pieces = 2, difficulty = 2 ):
+def initialize(dimension=4, nb_of_pieces=2, difficulty=2):
     """
-    Initialization function.  Should produce a valid board state of size `dimension` x `dimension`.
-
-    This function should initialize the datastructure needed to represent the board state.  Initially,
-    the board should be empty with only `nb_of_pieces` elements on there.  The initial elements shouldn't
-    be larger than `math.pow( 2, difficulty )`.
-
-    :param dimension: width and height of the board
-    :type dimension: int
-    :param nb_of_pieces: number of initial elements on the board
-    :type nb_of_pieces: int
-    :param difficulty: max log2 of initial elements.
-    :type difficulty: int
-    :return: valid board state with initial elements
-    :rtype list[ list[ int | None ] ]
+    Initialization function.
     """
 
     board = [[None for i in range(dimension)] for j in range(dimension)]
     piecesOnBoard = 0
-    while (piecesOnBoard < nb_of_pieces):
-        i = randint(0,3)
-        j = randint(0,3)
+    while piecesOnBoard < nb_of_pieces:
+        i = randint(0, 3)
+        j = randint(0, 3)
         if (board[i][j] is None) & (piecesOnBoard < nb_of_pieces):
-            board[i][j] = math.pow(2 , randint(1, difficulty))
+            board[i][j] = math.pow(2, randint(1, difficulty))
             piecesOnBoard += 1
 
     return board
 
+
 def match(row):
     """
     Matches all identical elements in the row.
-
-    This function searches for possible matches in a row ( a match is when
-    two identical elements are next to each other or only separated from
-    each other by `None`'s.).  When a match is found, the match is made and
-    the result is placed on the position of the *left* most element in the match.
-
-    The function also calculates the score for matching in this row.  The score for
-    matching the elements in the row is the sum of all matched elements.  If,
-    for example, the row has two 4 elements next to each other, the score will be
-    8.  If the row has two 2 elements and two 4 elements next to each other
-    (`[ 2, 2, 4, 4 ]`), the score will be 12.
-
-    Examples:
-        >>> match( [ 2, 2, None ] )
-        ( [ 4, None, None ], 4 )
-        >>> match( [ 2, 2, 2, ] )
-        ( [ 4, None, 2 ], 4 )
-        >>> match( [ 2, 2, 2, 2 ] )
-        ( [ 4, None, 4, None ], 8 )
-        >>> match( [ 2, None, 2 ] )
-        ( [ 4, None, None ], 4 )
-        >>> match( [ 2, 4, None, 4 ] )
-        ( [ 2, 8, None, None ], 8 )
-        >>> match( [ 2, 2, 4 ] )
-        ( [ 4, None, 4  ], 4 )
-        >>> match( [ 4, 2, 2 ] )
-        ( [ 4, 4, None ], 4 )
-        >>> match( [ 2, 2, 4, 4 ] )
-        ( [ 4, None, 8, None ], 12 )
-        >>> match( [ 2, 2, None, 2, 2 ] )
-        ( [ 4, None, None, 4, None ], 8 )
-        >>> match( [ 4, 2, 4, None ] )
-        ( [ 4, 2, 4, None ], 0 )
-
-    :type row: list[ int | None ]
-    :param row: row to match
-    :return: tuple with matched row and score
-    :rtype: ( list[ int | None ], int )
     """
     score = 0
-    for i in range(len(row)-1):
+    for i in range(len(row) - 1):
         if row[i] is not None:
-            if row[i] == row[i+1]:    #next to each other. ex: [2, 2, None]
-                row[i] = row[i]*2
-                row[i+1] = None
+            if row[i] == row[i + 1]:  # next to each other. ex: [2, 2, None]
+                row[i] *= 2
+                row[i + 1] = None
                 score += row[i]
-            elif row[i+1] is None:           #not next to each other. ex: [2, None, 2]
-                for e in range(i+2, len(row)):
+            elif row[i + 1] is None:  # not next to each other. ex: [2, None, 2]
+                for e in range(i + 2, len(row)):
                     if (row[e] is not None) & (row[e] == row[i]):
-                        row[i] = row[i]*2
+                        row[i] *= 2
                         row[e] = None
                         score += row[i]
 
-    return (row, score) # Complete me
+    return row, score  # Complete me
+
 
 def reduce(row):
     """
     Removes the empty spaces in a row.
-
-    This function moves all elements in the row to the front of
-    the row.  Elements are not changed, the are not summed.  The
-    dimension of the row should not change.
-
-    Examples:
-        >>> reduce( [ 2, None, 2, None ] )
-        [ 2, 2, None, None ]
-        >>> reduce( [ 4, 2, None, None ] )
-        [ 4, 2, None, None ]
-        >>> reduce( [ None, None, 2 ] )
-        [ 2, None, None ]
-
-    :rtype: list[int | None]
-    :param row: the row to remove empty spaces from
-    :return: row with all not None elements in the front
     """
 
     for e in range(len(row)):
         for i in range(len(row)):
-            if (row[i] is not None):
-                if (i > 0) & (row[i-1] is None):
-                    row[i-1] = row[i]
+            if row[i] is not None:
+                if (i > 0) & (row[i - 1] is None):
+                    row[i - 1] = row[i]
                     row[i] = None
-    return row # Complete me
+    return row  # Complete me
 
-def transpose( matrix ):
+
+def transpose(matrix):
     """
     Calculates the transpose of a matrix.
-
-    Examples:
-        >>> transpose( [ [ 2, None ], [ 2, None ] ] )
-        [ [ 2, 2 ], [ None, None ] ]
-
-    :param matrix: matrix to calculate transpose of
-    :return: the transpose of matrix
-    :rtype: list[list[int | None]]
     """
     matrix = [list(x) for x in zip(*matrix)]
-    return matrix # complete me
+    return matrix  # complete me
 
-def mirror( matrix ):
+
+def mirror(matrix):
     """
     Mirrors all rows in the matrix.
-
-    Examples:
-        >>> mirror( [ [ 1, 2, 3 ], [ 1, 2, 3 ], [ 1, 2, 3 ] ] )
-        [ [ 3, 2, 1 ], [ 3, 2, 1 ], [ 3, 2, 1 ] ]
-        >>> mirror( [ [ 1, 2 ], [ 3, 4 ] ] )
-        [ [ 2, 1 ], [ 4, 3 ] ]
-
-    :param matrix: matrix to mirror
-    :return: matrix with all rows reversed
-    :rtype: list[ list[ int | None ] ]
     """
-    return matrix # complete me
+
+    for i in range(len(matrix)):
+        matrix[i].reverse()
 
 
-def has_empty_slot( matrix ):
+
+    return matrix  # complete me
+
+
+def has_empty_slot(matrix):
     """
     Checks for empty slots (`None`) elements in the matrix.
 
@@ -183,10 +108,10 @@ def has_empty_slot( matrix ):
     :return: whether there is an empty slot
     :rtype boolean
     """
-    return True # Complete me
+    return True  # Complete me
 
 
-def has_matches( matrix ):
+def has_matches(matrix):
     """
     Checks if there are potential matches in the matrix.
 
@@ -221,10 +146,10 @@ def has_matches( matrix ):
     :return: whether there are any matches
     :rtype: boolean
     """
-    return False # Complete me
+    return False  # Complete me
 
 
-def insert_new( matrix, number, difficulty = 2):
+def insert_new(matrix, number, difficulty=2):
     """
     Inserts `number` new elements in the matrix.  The maximum log2 of the newly
     introduced elements should be difficulty.
@@ -266,10 +191,10 @@ def insert_new( matrix, number, difficulty = 2):
     :return: matrix with new elements
     :rtype: list[list[int | None]]
     """
-    return matrix # Complete me
+    return matrix  # Complete me
 
 
-def should_continue( matrix ):
+def should_continue(matrix):
     """
     Calculates whether the game should continue
 
@@ -279,7 +204,7 @@ def should_continue( matrix ):
     :param matrix: current board state
     :return: whether there are empty slots or matches left in the board
     """
-    return True # Complete me
+    return True  # Complete me
 
 
 def handle_key_press(board, score, direction):
@@ -316,7 +241,7 @@ def handle_key_press(board, score, direction):
     :param direction: symbol that was pressed ( one of "Up", "Down", "Left", "Right" )
     :return: new valid board state and the players new score
     """
-    return ( board, score ) # Complete me
+    return (board, score)  # Complete me
 
 
 # This next bit of code initializes our GUI code with your functions
