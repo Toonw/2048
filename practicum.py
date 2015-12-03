@@ -14,6 +14,7 @@ from random import randint
 import math
 
 
+
 def initialize(dimension=4,nb_of_pieces=2,difficulty=2):
 
     board = [[None for i in range(dimension)] for j in range(dimension)]
@@ -186,56 +187,58 @@ def handle_key_press(board, score, direction):
     :param direction: symbol that was pressed ( one of "Up", "Down", "Left", "Right" )
     :return: new valid board state and the players new score
     """
-    initialBoard = list(board)
+    initialBoard =  origin(board)
 
 
-    if should_continue(board):
-        if direction == "Up":
-            for i in range(len(board)):
-                score += match(board[i])[1]
-                reduce(board[i])
 
-            if board != initialBoard:
-                insert_new(board, 2, 2)
+    if direction == "Up":
+        for i in range(len(board)):
+            score += match(board[i])[1]
+            reduce(board[i])
+        if board != initialBoard:
+            insert_new(board, 1, 2)
 
-        elif direction == "Down":
-            mirror(board)
-            for i in range(len(board)):
-                score += match(board[i])[1]
-                reduce(board[i])
-            mirror(board)
+    elif direction == "Down":
+        mirror(board)
+        for i in range(len(board)):
+            score += match(board[i])[1]
+            reduce(board[i])
+        mirror(board)
 
-            if board != initialBoard:
-                insert_new(board, 2, 2)
+        if board != initialBoard:
+            insert_new(board, 1, 2)
 
-        elif direction == "Left":
-            board = transpose(board)
-            for i in range(len(board)):
-                score += match(board[i])[1]
-                reduce(board[i])
-            board = transpose(board)
+    elif direction == "Left":
+        board = transpose(board)
+        for i in range(len(board)):
+            score += match(board[i])[1]
+            reduce(board[i])
+        board = transpose(board)
 
-            if board != initialBoard:
-                insert_new(board, 2, 2)
+        if board != initialBoard:
+            insert_new(board, 1, 2)
 
-        elif direction == "Right":
-            board = transpose(board)
-            for i in range(len(board)):
-                score += match(board[i])[1]
-                reduce(board[i])
-            mirror(board)
-            for i in range(len(board)):
-                reduce(board[i])
-            mirror(board)
-            board = transpose(board)
+    elif direction == "Right":
+        board = transpose(board)
+        for i in range(len(board)):
+            score += match(board[i])[1]
+            reduce(board[i])
+        mirror(board)
+        for i in range(len(board)):
+            reduce(board[i])
+        mirror(board)
+        board = transpose(board)
 
-            if board != initialBoard:
-                insert_new(board, 2, 2)
+        if board != initialBoard:
+            insert_new(board, 1, 2)
 
     return board, score,   # Complete me
 
 
-
+def origin(board):
+    if len(board) == 0:
+        return []
+    return [list(board[0])] + origin(board[1:])
 
 
 # This next bit of code initializes our GUI code with your functions
