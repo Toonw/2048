@@ -14,10 +14,12 @@ from random import randint
 import math
 
 
-
 def initialize(dimension=4,nb_of_pieces=2,difficulty=2):
 
+    # initializes a two-dimensional array with None elements
     board = [[None for i in range(dimension)] for j in range(dimension)]
+
+    # places random pieces on random places in the array
     pieces_on_board = 0
     while pieces_on_board < nb_of_pieces:
         i = randint(0, dimension-1)
@@ -42,11 +44,13 @@ def match(row):
                 score += row[i]
             elif row[i + 1] is None:  # not next to each other. ex: [2, None, 2]
                 for e in range(i + 2, len(row)):
-                    if (row[e] is not None) & (row[e] == row[i]):
-                        row[i] *= 2
-                        row[e] = None
-                        score += row[i]
-
+                    if row[e] is not None:
+                        if row[e] == row[i]:
+                            row[i] *= 2
+                            row[e] = None
+                            score += row[i]
+                        else:
+                            break
     return row, score  # Complete me
 
 
@@ -127,7 +131,7 @@ def has_matches(matrix):
     return False  # Complete me
 
 
-def insert_new(matrix, number, difficulty=2):
+def insert_new(matrix, number, difficulty=1):
     """
     Inserts `number` new elements in the matrix.
     """
@@ -157,31 +161,6 @@ def handle_key_press(board, score, direction):
     """
     Function called whenever there was a keypress.
 
-    Should return a tuple with the new state of the
-    board, the score and whether the game should continue.
-
-    This function should calculate the new state of the board after
-    all elements have been moved in the direction indicated by `direction`.
-    All elements should be matched and then moved in the direction of the
-    keypress.  If the state of the board has changed, new elements can
-    be introduced in the board.
-
-    We consider board to be a matrix where board[i][j] is the element in the i-th column
-    of the board and j-th row of the board.
-
-    Given the current score that is passed as an argument, the function should also
-    update that value and return it as the second item in the tuple.
-
-    Examples:
-        >>> handle_key_press( [ [ 2, 2 ], [ None, 4 ] ], 0, "Up" )
-        ( [ [ 4, None ], [ 4, None ] ], 4 )
-        >>> handle_key_press( [ [ 4, None ], [ 4, None ] ], 4, "Left" )
-        ( [ [ 8, None ], [ None, 2 ] ], 12 )
-        >>> handle_key_press( [ [ 8, None ], [ None, 2 ] ], 12, "Right" )
-        ( [ [ None, None ], [ 8, 2 ] ], 12 )
-        >>> handle_key_press( [ [ None, None ], [ 8, 2 ] ], 12, "Down" )
-        ( [ [ 2, None ], [ 8, 2 ] ], 12 )
-
     :param board: board state as returned by handle_key_press or initialize function
     :param score: players current score
     :param direction: symbol that was pressed ( one of "Up", "Down", "Left", "Right" )
@@ -189,16 +168,17 @@ def handle_key_press(board, score, direction):
     """
     initialBoard =  origin(board)
 
-
-
     if direction == "Up":
+
         for i in range(len(board)):
             score += match(board[i])[1]
             reduce(board[i])
+
         if board != initialBoard:
             insert_new(board, 1, 2)
 
     elif direction == "Down":
+
         mirror(board)
         for i in range(len(board)):
             score += match(board[i])[1]
@@ -209,6 +189,7 @@ def handle_key_press(board, score, direction):
             insert_new(board, 1, 2)
 
     elif direction == "Left":
+
         board = transpose(board)
         for i in range(len(board)):
             score += match(board[i])[1]
@@ -219,6 +200,7 @@ def handle_key_press(board, score, direction):
             insert_new(board, 1, 2)
 
     elif direction == "Right":
+
         board = transpose(board)
         for i in range(len(board)):
             score += match(board[i])[1]
@@ -232,7 +214,7 @@ def handle_key_press(board, score, direction):
         if board != initialBoard:
             insert_new(board, 1, 2)
 
-    return board, score,   # Complete me
+    return board, score   # Complete me
 
 
 def origin(board):
